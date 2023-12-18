@@ -33,6 +33,18 @@ jobs:
       with:
         arguments: build
 
+    - name: Deploy to Dev Environment
+      if: success()
+      run: |
+          # Add your deployment script or commands to deploy to the dev environment
+          # For example, deploying to a server or a cloud service
+
+    - name: Promote to Prod
+      if: success() && github.event_name == 'workflow_run'
+      run: |
+              # Add your script or commands to promote the commit to the prod environment
+              # This step will be manual and triggered by QA after testing is done    
+
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v6
       with:

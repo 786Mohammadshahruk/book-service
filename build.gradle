@@ -24,3 +24,29 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+test {
+    // Fail the build if any test fails
+    ignoreFailures = false
+}
+
+// This task will be executed before deployment
+task checkTestResults {
+    dependsOn test
+
+    doLast {
+        // Check if any test failed
+        if (test.result.failedTestCount > 0) {
+            throw new GradleException("Tests failed. Build cannot be deployed.")
+        } else {
+            println "All tests passed. Proceeding with deployment."
+        }
+    }
+}
+
+// This task is an example of a deployment task
+task deploy(type: Copy) {
+    // Configure deployment task here
+    from 'build/libs'
+    into 'deploy'
+}
