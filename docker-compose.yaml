@@ -1,0 +1,22 @@
+version: '2'
+services:
+  book-demo-service:
+    image:
+      book-service
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: bookshop
+      POSTGRES_PASSWORD: bookshop
+      POSTGRES_DB: bookshopdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
