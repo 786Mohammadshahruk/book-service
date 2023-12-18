@@ -1,0 +1,13 @@
+name: Java CI with Gradle
+
+on:
+  workflow_run:
+    types:
+      - completed
+    workflows:
+      - dev
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "e2e"
