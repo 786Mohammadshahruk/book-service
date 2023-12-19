@@ -1,10 +1,10 @@
-package com.book.service.books;
+package com.book.service.books.dto;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.*;
 
 @Data
-public class Books {
+public class BooksModel {
     @CsvBindByName(column = "ISBN",required = true)
     private String isbn;
     @CsvBindByName(column = "name")

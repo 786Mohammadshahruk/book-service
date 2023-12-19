@@ -7,3 +7,7 @@ spring:
     username: bookshop
     password: bookshop
     driverClassName: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
