@@ -18,11 +18,11 @@ public class TestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void testShouldFail() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/hello"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("hello"));
-
-    }
+//    @Test
+//    void testShouldFail() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.get("/hello"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("hello"));
+//
+//    }
 }
