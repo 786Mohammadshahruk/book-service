@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.1.5'
+    id 'org.flywaydb.flyway' version '9.22.3'
 }
 
-archivesBaseName = 'book-service'
 group = 'com.book.service'
 version = '0.0.1'
 
@@ -19,34 +19,14 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.postgresql:postgresql:42.7.0'
+    implementation 'org.flywaydb:flyway-core:9.22.3'
 }
 
 test {
-    // Fail the build if any test fails
-    ignoreFailures = false
-}
+    useJUnitPlatform()
 
-// This task will be executed before deployment
-task checkTestResults {
-    dependsOn test
-
-    doLast {
-        // Check if any test failed
-        if (test.result.failedTestCount > 0) {
-            throw new GradleException("Tests failed. Build cannot be deployed.")
-        } else {
-            println "All tests passed. Proceeding with deployment."
-        }
-    }
-}
-
-// This task is an example of a deployment task
-task deploy(type: Copy) {
-    // Configure deployment task here
-    from 'build/libs'
-    into 'deploy'
 }
