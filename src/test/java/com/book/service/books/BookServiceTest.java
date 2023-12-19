@@ -17,55 +17,37 @@ public class BookServiceTest {
 
     @Test
     public void shouldReturnBookListFromDB() {
-
         BookRepository bookRepository = Mockito.mock(BookRepository.class);
-
         BookServiceImpl bookService = new BookServiceImpl(bookRepository);
-
-        BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description",
-                "Book author", 2023, "imageurl/img.img",
-                "largeImageurl.img", 100.55F, 1, 4.5F);
-
-        BookEntity bookEntity2 = new BookEntity("01235X", "TDD Book", "AMAR book",
-                "Amar", 2022, "imageurl/img.img",
-                "largeImageurl.img", 105.55F, 2, 5.0F);
-
-        Book book = new Book("01234X", "Java Book", "Book description",
-                "Book author", 2023, "imageurl/img.img",
-                "largeImageurl.img", 100.55F, 1, 4.5F);
-        Book book2 = new Book("01235X", "TDD Book", "AMAR book",
-                "Amar", 2022, "imageurl/img.img",
-                "largeImageurl.img", 105.55F, 2, 5.0F);
-
-        List<BookEntity> bookEntityList = new ArrayList<>(List.of(bookEntity2, bookEntity));
-        List<Book> expectedResponse = new ArrayList<>(List.of(book, book2));
-
+        List<BookEntity> bookEntityList = bookEntity();
+        List<Book> expectedResponse = books();
         //mock
         Mockito.when(bookRepository.findAll()).thenReturn(bookEntityList);
-
         List<Book> actualResponse = bookService.bookList();
-
-
         //verification
         assertTrue("true", expectedResponse.size() == actualResponse.size()
                 && expectedResponse.containsAll(actualResponse));
-
-        Mockito.verify(bookRepository,Mockito.times(1)).findAll();
-
+        Mockito.verify(bookRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     public void shouldReturnEmptyBookListFromDBIfNotPresent() {
-
         BookRepository bookRepository = Mockito.mock(BookRepository.class);
-
         Mockito.when(bookRepository.findAll()).thenReturn(Collections.emptyList());
-
         BookServiceImpl bookService = new BookServiceImpl(bookRepository);
-
         List<Book> actualResponse = bookService.bookList();
-
         assertTrue("true", 0 == actualResponse.size());
+    }
 
+    private List<BookEntity> bookEntity() {
+        BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55F, 1, 4.5F);
+        BookEntity bookEntity2 = new BookEntity("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55F, 2, 5.0F);
+        return List.of(bookEntity, bookEntity2);
+    }
+
+    private List<Book> books() {
+        Book book1 = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55F, 1, 4.5F);
+        Book book2 = new Book("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55F, 2, 5.0F);
+        return List.of(book1, book2);
     }
 }
