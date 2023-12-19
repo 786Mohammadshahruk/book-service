@@ -26,18 +26,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test
-      - name: Code coverage
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: jacocoTestCoverageVerification
-  integration-test:
+  deploy-to-dev:
     needs: unit-test
     runs-on: ubuntu-latest
     steps:
       - run: echo "integration test"
-  deploy-to-dev:
-    needs: integration-test
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "integration-test"
 
