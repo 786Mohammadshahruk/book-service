@@ -28,7 +28,7 @@ public class BookServiceImpl {
         try (BufferedReader stream = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             stream.lines().map(line -> line.split(",")).forEach(splitted -> {
                 List<String> dataLine = Arrays.asList(splitted);
-                String isbn = removeASCII(dataLine.get(0));
+                String isbn = removeASCII(dataLine.get(0)).trim();
                 String bookName = dataLine.get(1);
                 String description = dataLine.get(2);
                 String author = dataLine.get(3);
@@ -58,5 +58,10 @@ public class BookServiceImpl {
         return str.replaceAll("[^\\x00-\\x7F]", " ") // remove all non-ASCII characters
                 .replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", " ") //remove all the ASCII control characters
                 .replaceAll("\\p{C}", " "); //removes non-printable characters from Unicode
+    }
+
+    public Book book(String isbn) {
+        BookEntity bookEntity = bookRepository.findByIsbn(isbn);
+        return new Book(bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating());
     }
 }

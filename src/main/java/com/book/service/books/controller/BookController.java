@@ -1,9 +1,11 @@
 package com.book.service.books.controller;
 
+import com.book.service.books.records.BookDetailsResponse;
 import com.book.service.books.records.BookResponse;
 import com.book.service.books.service.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +56,8 @@ public class BookController {
         return ResponseEntity.ok(new BookResponse(bookServiceImpl.bookList()));
     }
 
-
+    @GetMapping("/book/{isbn}")
+    public ResponseEntity<BookDetailsResponse> getBookDetails(@PathVariable("isbn") String isbn) {
+        return ResponseEntity.ok(new BookDetailsResponse(bookServiceImpl.book(isbn)));
+    }
 }

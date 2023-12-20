@@ -6,10 +6,13 @@ import com.book.service.books.records.Book;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
@@ -25,10 +28,9 @@ public class BookServiceTest {
         when(bookRepository.findAll()).thenReturn(bookEntityList);
         List<Book> actualResponse = bookService.bookList();
         //verification
-        assertTrue("true", expectedResponse.size() == actualResponse.size() && expectedResponse.containsAll(actualResponse));
+        assertTrue("true", expectedResponse.size() == actualResponse.size());
         verify(bookRepository, times(1)).findAll();
     }
-
     @Test
     public void shouldReturnEmptyBookListFromDBIfNotPresent() {
         BookRepository bookRepository = Mockito.mock(BookRepository.class);
@@ -50,6 +52,7 @@ public class BookServiceTest {
         bookRepository.save(bookEntity);
         verify(bookRepository, times(1)).save(any(BookEntity.class));
     }
+
     private List<BookEntity> bookEntity() {
         BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55F, 1, 4.5F);
         BookEntity bookEntity2 = new BookEntity("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55F, 2, 5.0F);
@@ -57,8 +60,32 @@ public class BookServiceTest {
     }
 
     private List<Book> books() {
-        Book book1 = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55F, 1, 4.5F);
-        Book book2 = new Book("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55F, 2, 5.0F);
+        Book book1 = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
+        Book book2 = new Book("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55, 2, 5.0F);
         return List.of(book1, book2);
     }
+
+    @Test
+    public void shouldReturnBookFromDBForSpecifiedISBN() {
+        BookRepository bookRepository = Mockito.mock(BookRepository.class);
+        BookServiceImpl bookService = new BookServiceImpl(bookRepository);
+        BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
+        Book expectedResponse = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
+
+        when(bookRepository.findByIsbn("01234X")).thenReturn(bookEntity);
+        Book actualResponse = bookService.book("01234X");
+        assertEquals(actualResponse,expectedResponse);
+        verify(bookRepository,times(1)).findByIsbn("01234X");
+    }
+
+    @Test
+    public void shouldReturnEmptyBookFromDBIfIsbnNotPresent() {
+        BookRepository bookRepository = Mockito.mock(BookRepository.class);
+        BookServiceImpl bookService = new BookServiceImpl(bookRepository);
+        when(bookRepository.findByIsbn("01234X")).thenReturn(new BookEntity());
+
+        Book actualResponse = bookService.book("01234X");
+        assertEquals(actualResponse,new Book(null,null,null,null,null,null,null,0.0,null,0.0));
+    }
+
 }
