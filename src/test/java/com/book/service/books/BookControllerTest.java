@@ -2,6 +2,7 @@ package com.book.service.books;
 
 import com.book.service.books.controller.BookController;
 import com.book.service.books.records.Book;
+import com.book.service.books.records.BookDetailsResponse;
 import com.book.service.books.service.BookServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
 
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BookController.class)
@@ -37,7 +39,7 @@ public class BookControllerTest {
     void shouldGetNoBooksIfNotAvailableAny() throws Exception {
         when(bookService.bookList()).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/books"))
+        mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").isEmpty());
     }
@@ -52,7 +54,7 @@ public class BookControllerTest {
 
         when(bookService.bookList()).thenReturn(List.of(book));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/books"))
+        mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books[0].bookName")
                         .value("Java book"))
@@ -94,5 +96,30 @@ public class BookControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.errorCode").value("ERROR_INVALID_FILE_FORMAT"))
                 .andExpect(jsonPath("$.errorMessage").value("Uploaded file is not a CSV"));
+    }
+
+    @Test
+    void shouldGetNoBooksIfNotAvailableAnyForSpecifiedIsbn() throws Exception {
+        when(bookService.book("123456")).thenReturn(null);
+
+        mockMvc.perform(get("/book/{isbn}",123456))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books").isEmpty());
+    }
+
+    @Test
+    public void shouldReturnBookDetailsForMentionedISBN() throws Exception {
+        Book book = new Book("123456", "Java book", "Book description",
+                "Amar", 2023, "imageUrl/img.img",
+                "largeImageUrl.img", 100.55F, 1, 4.5F);
+        BookDetailsResponse mockResponse = new BookDetailsResponse(book);
+
+        when(bookService.book("123456")).thenReturn(book);
+
+
+        mockMvc.perform(get("/book/{isbn}", "123456"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books.author").value(book.author()))
+                .andReturn();
     }
 }
