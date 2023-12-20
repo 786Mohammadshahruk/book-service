@@ -20,6 +20,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin
 public class BookController {
 
     private static final String ERROR_INVALID_FILE_FORMAT = "ERROR_INVALID_FILE_FORMAT";
