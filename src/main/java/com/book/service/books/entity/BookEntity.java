@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "book")
-@NoArgsConstructor
 public class BookEntity {
 
     @Id
@@ -32,6 +31,9 @@ public class BookEntity {
     private Integer numberOfAvailableBooks;
     @Column(name = "rating")
     private Double rating;
+
+    public BookEntity() {
+    }
 
     public Integer getBookId() {
         return bookId;

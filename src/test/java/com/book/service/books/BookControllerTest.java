@@ -74,7 +74,7 @@ public class BookControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.multipart("/upload")
                         .file(multipartFile))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
     }
 
