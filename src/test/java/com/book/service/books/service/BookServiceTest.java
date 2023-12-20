@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -70,19 +71,20 @@ public class BookServiceTest {
         BookRepository bookRepository = Mockito.mock(BookRepository.class);
         BookServiceImpl bookService = new BookServiceImpl(bookRepository);
         BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
+        Optional<BookEntity> optional = Optional.of(bookEntity);
         Book expectedResponse = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
 
-        when(bookRepository.findByIsbn("01234X")).thenReturn(bookEntity);
+        when(bookRepository.findById("01234X")).thenReturn(optional);
         Book actualResponse = bookService.book("01234X");
         assertEquals(actualResponse,expectedResponse);
-        verify(bookRepository,times(1)).findByIsbn("01234X");
+        verify(bookRepository,times(1)).findById("01234X");
     }
 
     @Test
     public void shouldReturnEmptyBookFromDBIfIsbnNotPresent() {
         BookRepository bookRepository = Mockito.mock(BookRepository.class);
         BookServiceImpl bookService = new BookServiceImpl(bookRepository);
-        when(bookRepository.findByIsbn("01234X")).thenReturn(new BookEntity());
+        when(bookRepository.findById("01234X")).thenReturn(Optional.of(new BookEntity()));
 
         Book actualResponse = bookService.book("01234X");
         assertEquals(actualResponse,new Book(null,null,null,null,null,null,null,0.0,null,0.0));

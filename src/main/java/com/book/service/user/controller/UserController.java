@@ -2,7 +2,6 @@ package com.book.service.user.controller;
 
 import com.book.service.user.record.User;
 import com.book.service.user.record.UserResponse;
-import com.book.service.user.record.Users;
 import com.book.service.user.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+
 public class UserController {
     private UserServiceImpl userService;
 

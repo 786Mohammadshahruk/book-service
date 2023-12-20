@@ -1,16 +1,13 @@
 package com.book.service.books.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "book")
 public class BookEntity {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private Integer bookId;
+    private String bookId;
     @Column(name = "isbn")
     private String isbn;
     @Column(name = "book_name")
@@ -35,11 +32,11 @@ public class BookEntity {
     public BookEntity() {
     }
 
-    public Integer getBookId() {
+    public String getBookId() {
         return bookId;
     }
 
-    public void setBookId(Integer bookId) {
+    public void setBookId(String bookId) {
         this.bookId = bookId;
     }
 
@@ -115,11 +112,11 @@ public class BookEntity {
         this.numberOfAvailableBooks = numberOfAvailableBooks;
     }
 
-    public Double getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

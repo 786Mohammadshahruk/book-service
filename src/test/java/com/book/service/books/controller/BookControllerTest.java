@@ -73,9 +73,9 @@ public class BookControllerTest {
                 content
         );
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/upload")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/books")
                         .file(multipartFile))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
     }
 
@@ -89,7 +89,7 @@ public class BookControllerTest {
                 "text/plain",
                 content
         );
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/upload")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/books")
                         .file(multipartFile))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -102,8 +102,7 @@ public class BookControllerTest {
         when(bookService.book("123456")).thenReturn(null);
 
         mockMvc.perform(get("/book/{isbn}",123456))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.books").isEmpty());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -118,7 +117,7 @@ public class BookControllerTest {
 
         mockMvc.perform(get("/book/{isbn}", "123456"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.books.author").value(book.author()))
+                .andExpect(jsonPath("$.author").value(book.author()))
                 .andReturn();
     }
 }

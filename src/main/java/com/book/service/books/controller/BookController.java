@@ -1,11 +1,11 @@
 package com.book.service.books.controller;
 
-import com.book.service.books.records.BookDetailsResponse;
+import com.book.service.books.records.Book;
 import com.book.service.books.records.BookResponse;
 import com.book.service.books.service.BookServiceImpl;
+import com.opencsv.exceptions.CsvException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +30,13 @@ public class BookController {
         this.bookServiceImpl = bookServiceImpl;
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadFiles(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/books")
+    public ResponseEntity<?> loadBooks(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
         if (!isCSVFile(file)) {
             return createErrorResponse(ERROR_INVALID_FILE_FORMAT, ERROR_MESSAGE_INVALID_FILE_FORMAT);
         }
-
-        return new ResponseEntity<>(bookServiceImpl.readCSVFile(file), HttpStatus.CREATED);
+        bookServiceImpl.saveBooks(file.getInputStream());
+        return new ResponseEntity<>("Loaded Books Successfully", HttpStatus.OK);
     }
 
     private boolean isCSVFile(MultipartFile file) {
@@ -56,8 +56,8 @@ public class BookController {
         return ResponseEntity.ok(new BookResponse(bookServiceImpl.bookList()));
     }
 
-    @GetMapping("/book/{isbn}")
-    public ResponseEntity<BookDetailsResponse> getBookDetails(@PathVariable("isbn") String isbn) {
-        return ResponseEntity.ok(new BookDetailsResponse(bookServiceImpl.book(isbn)));
+    @GetMapping("/book/{bookId}")
+    public ResponseEntity<Book> getBookDetails(@PathVariable("bookId") String isbn) {
+        return ResponseEntity.ok(bookServiceImpl.book(isbn));
     }
 }
