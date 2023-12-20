@@ -1,6 +1,5 @@
-package com.book.service.books;
+package com.book.service.books.controller;
 
-import com.book.service.books.controller.BookController;
 import com.book.service.books.records.Book;
 import com.book.service.books.service.BookServiceImpl;
 import org.junit.jupiter.api.Test;

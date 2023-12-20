@@ -1,10 +1,8 @@
-package com.book.service.books;
+package com.book.service.books.service;
 
 import com.book.service.books.dao.BookRepository;
 import com.book.service.books.entity.BookEntity;
 import com.book.service.books.records.Book;
-import com.book.service.books.service.BookServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;

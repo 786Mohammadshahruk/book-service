@@ -1,7 +1,7 @@
 drop table IF EXISTS USERS;
 create TABLE USERS
 (
-    USER_ID                   INTEGER PRIMARY KEY,
+    USER_ID                   SERIAL PRIMARY KEY,
     NAME                 VARCHAR(100),
     USER_NAME                 VARCHAR(100),
     MOBILE_NUMBER                 VARCHAR(100),
