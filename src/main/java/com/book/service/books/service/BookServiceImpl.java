@@ -28,7 +28,7 @@ public class BookServiceImpl {
         try (BufferedReader stream = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             stream.lines().map(line -> line.split(",")).forEach(splitted -> {
                 List<String> dataLine = Arrays.asList(splitted);
-                String isbn = removeASCII(dataLine.get(0));
+                String isbn = removeASCII(dataLine.get(0)).trim();
                 String bookName = dataLine.get(1);
                 String description = dataLine.get(2);
                 String author = dataLine.get(3);
