@@ -59,4 +59,9 @@ public class BookServiceImpl {
                 .replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", " ") //remove all the ASCII control characters
                 .replaceAll("\\p{C}", " "); //removes non-printable characters from Unicode
     }
+
+    public Book book(String isbn) {
+        BookEntity bookEntity = bookRepository.findByIsbn(isbn);
+        return new Book(bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating());
+    }
 }
