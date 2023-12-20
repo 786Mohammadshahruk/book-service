@@ -30,10 +30,9 @@ jobs:
     needs: unit-test
     runs-on: ubuntu-latest
     steps:
-      - run: echo "integration test"
-
+      - run: echo "deploy-to-dev"
   deploy-to-docker:
-    need: deploy-to-dev
+    needs: deploy-to-dev
     runs-on: ubuntu-latest
     steps:
       - name: Build & push Docker image
@@ -45,4 +44,3 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
