@@ -49,7 +49,7 @@ public class BookControllerTest {
 
         Book book = new Book("01234X", "Java book", "Book description",
                 "Amar", 2023, "imageUrl/img.img",
-                "largeImageUrl.img", 100.55F, 1, 4.5F);
+                "largeImageUrl.img", 100.55, 1, 4.5F);
 
 
         when(bookService.bookList()).thenReturn(List.of(book));
@@ -111,7 +111,7 @@ public class BookControllerTest {
     public void shouldReturnBookDetailsForMentionedISBN() throws Exception {
         Book book = new Book("123456", "Java book", "Book description",
                 "Amar", 2023, "imageUrl/img.img",
-                "largeImageUrl.img", 100.55F, 1, 4.5F);
+                "largeImageUrl.img", 100.55, 1, 4.5F);
         BookDetailsResponse mockResponse = new BookDetailsResponse(book);
 
         when(bookService.book("123456")).thenReturn(book);

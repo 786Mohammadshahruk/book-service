@@ -26,11 +26,11 @@ public class BookEntity {
     @Column(name = "large_image_url")
     private String largeImageUrl;
     @Column(name = "price")
-    private Double price;
+    private double price;
     @Column(name = "number_of_available_books")
     private Integer numberOfAvailableBooks;
     @Column(name = "rating")
-    private Double rating;
+    private double rating;
 
     public BookEntity() {
     }
@@ -99,11 +99,11 @@ public class BookEntity {
         this.largeImageUrl = largeImageUrl;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
