@@ -46,7 +46,7 @@ public class BookControllerTest {
     @Test
     void shouldGetBooksIfAvailable() throws Exception {
 
-        Book book = new Book("01234X", "Java book", "Book description",
+        Book book = new Book("1","01234X", "Java book", "Book description",
                 "Amar", 2023, "imageUrl/img.img",
                 "largeImageUrl.img", 100.55, 1, 4.5F);
 
@@ -101,13 +101,13 @@ public class BookControllerTest {
     void shouldGetNoBooksIfNotAvailableAnyForSpecifiedIsbn() throws Exception {
         when(bookService.book("123456")).thenReturn(null);
 
-        mockMvc.perform(get("/book/{isbn}",123456))
+        mockMvc.perform(get("/books/{isbn}",123456))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldReturnBookDetailsForMentionedISBN() throws Exception {
-        Book book = new Book("123456", "Java book", "Book description",
+        Book book = new Book("1","123456", "Java book", "Book description",
                 "Amar", 2023, "imageUrl/img.img",
                 "largeImageUrl.img", 100.55, 1, 4.5F);
         BookDetailsResponse mockResponse = new BookDetailsResponse(book);
@@ -115,7 +115,7 @@ public class BookControllerTest {
         when(bookService.book("123456")).thenReturn(book);
 
 
-        mockMvc.perform(get("/book/{isbn}", "123456"))
+        mockMvc.perform(get("/books/{isbn}", "123456"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author").value(book.author()))
                 .andReturn();

@@ -71,14 +71,14 @@ public class BookServiceImpl {
 
 
     public List<Book> bookList() {
-        return bookRepository.findAll().stream().map(bookEntity -> new Book(bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating())).collect(Collectors.toList());
+        return bookRepository.findAll().stream().map(bookEntity -> new Book(bookEntity.getBookId(), bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating())).collect(Collectors.toList());
     }
 
     public Book book(String bookId) {
         Optional<BookEntity> bookEntityOptional = bookRepository.findById(bookId);
         if (bookEntityOptional.isPresent()) {
             BookEntity bookEntity = bookEntityOptional.get();
-            return new Book(bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating());
+            return new Book(bookEntity.getBookId(), bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating());
         }
         return null;
 

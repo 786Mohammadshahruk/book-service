@@ -61,8 +61,8 @@ public class BookServiceTest {
     }
 
     private List<Book> books() {
-        Book book1 = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
-        Book book2 = new Book("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55, 2, 5.0F);
+        Book book1 = new Book("1","01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
+        Book book2 = new Book("1","01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55, 2, 5.0F);
         return List.of(book1, book2);
     }
 
@@ -72,7 +72,7 @@ public class BookServiceTest {
         BookServiceImpl bookService = new BookServiceImpl(bookRepository);
         BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
         Optional<BookEntity> optional = Optional.of(bookEntity);
-        Book expectedResponse = new Book("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
+        Book expectedResponse = new Book(null,"01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55, 1, 4.5F);
 
         when(bookRepository.findById("01234X")).thenReturn(optional);
         Book actualResponse = bookService.book("01234X");
@@ -87,7 +87,7 @@ public class BookServiceTest {
         when(bookRepository.findById("01234X")).thenReturn(Optional.of(new BookEntity()));
 
         Book actualResponse = bookService.book("01234X");
-        assertEquals(actualResponse,new Book(null,null,null,null,null,null,null,0.0,null,0.0));
+        assertEquals(actualResponse,new Book(null,null,null,null,null,null,null,null,0.0,null,0.0));
     }
 
 }

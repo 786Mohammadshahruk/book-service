@@ -56,7 +56,7 @@ public class BookController {
         return ResponseEntity.ok(new BookResponse(bookServiceImpl.bookList()));
     }
 
-    @GetMapping("/book/{bookId}")
+    @GetMapping("/books/{bookId}")
     public ResponseEntity<Book> getBookDetails(@PathVariable("bookId") String isbn) {
         return ResponseEntity.ok(bookServiceImpl.book(isbn));
     }
