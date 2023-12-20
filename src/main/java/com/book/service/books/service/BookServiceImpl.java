@@ -1,5 +1,6 @@
 package com.book.service.books.service;
 
+import com.book.service.books.entity.BookEntity;
 import com.book.service.books.records.Book;
 import com.book.service.books.dao.BookRepository;
 import com.book.service.books.dto.BooksModel;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,24 +28,44 @@ public class BookServiceImpl {
         this.bookRepository = bookRepository;
     }
 
-    public ResponseEntity<List<BooksModel>> uploadFile(MultipartFile file) {
-        List<BooksModel> books = convertToModel(file, BooksModel.class);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
+    public ResponseEntity<String> readCSVFile(MultipartFile file) throws IOException {
 
-    public <T> List<T> convertToModel(MultipartFile file, Class<T> responseType) {
-        List<T> models;
-        try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            CsvToBean<?> csvToBean = new CsvToBeanBuilder(reader)
-                    .withType(responseType)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .withIgnoreEmptyLine(true)
-                    .build();
-            models = (List<T>) csvToBean.parse();
-        } catch (Exception ex) {
-            throw new IllegalArgumentException(ex.getCause().getMessage());
+        String line = null;
+        BufferedReader stream = null;
+
+        try {
+            stream = new BufferedReader(new InputStreamReader(file.getInputStream()));
+            while ((line = stream.readLine()) != null) {
+                String[] splitted = line.split(",");
+                List<String> dataLine = new ArrayList<String>(splitted.length);
+                for (String data : splitted)
+                    dataLine.add(data);
+                System.out.println(dataLine);
+
+                String isbn = dataLine.get(0);
+                String bookName = dataLine.get(1);
+                String description = dataLine.get(2);
+                String author = dataLine.get(3);
+                Integer publicationYear = Integer.parseInt(dataLine.get(4));
+                String smallImageUrl = dataLine.get(5);
+                String largeImageUrl = dataLine.get(6);
+                double price = Double.parseDouble(dataLine.get(7));
+                Integer numberOfAvailableBooks = Integer.parseInt(dataLine.get(8));
+                double rating = Double.parseDouble(dataLine.get(9));
+                BookEntity bookEntity = new BookEntity(isbn, bookName, description, author, publicationYear, smallImageUrl, largeImageUrl, price, numberOfAvailableBooks, rating);
+
+                try {
+                    BookEntity bookEntityFromDB = bookRepository.save(bookEntity);
+                } catch (Exception e) {
+
+                }
+            }
+        } finally {
+            if (stream != null)
+                stream.close();
         }
-        return models;
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 

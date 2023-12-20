@@ -9,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -23,8 +26,14 @@ public class BookController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<List<BooksModel>> uploadFiles(@RequestParam("file") MultipartFile file) {
-        return bookServiceImpl.uploadFile(file);
+    public ResponseEntity<?> uploadFiles(@RequestParam("file") MultipartFile file) throws IOException {
+        if (!file.getContentType().equals("text/csv")) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("errorCode","ERROR_INVALID_FILE_FORMAT");
+            errorResponse.put("errorMessage", "Uploaded file is not a CSV");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+        return bookServiceImpl.readCSVFile(file);
     }
 
 
