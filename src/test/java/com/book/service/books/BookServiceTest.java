@@ -4,13 +4,15 @@ import com.book.service.books.dao.BookRepository;
 import com.book.service.books.entity.BookEntity;
 import com.book.service.books.records.Book;
 import com.book.service.books.service.BookServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.ArrayList;
+import org.springframework.mock.web.MockMultipartFile;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
-
+import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 public class BookServiceTest {
@@ -22,23 +24,34 @@ public class BookServiceTest {
         List<BookEntity> bookEntityList = bookEntity();
         List<Book> expectedResponse = books();
         //mock
-        Mockito.when(bookRepository.findAll()).thenReturn(bookEntityList);
+        when(bookRepository.findAll()).thenReturn(bookEntityList);
         List<Book> actualResponse = bookService.bookList();
         //verification
-        assertTrue("true", expectedResponse.size() == actualResponse.size()
-                && expectedResponse.containsAll(actualResponse));
-        Mockito.verify(bookRepository, Mockito.times(1)).findAll();
+        assertTrue("true", expectedResponse.size() == actualResponse.size() && expectedResponse.containsAll(actualResponse));
+        verify(bookRepository, times(1)).findAll();
     }
 
     @Test
     public void shouldReturnEmptyBookListFromDBIfNotPresent() {
         BookRepository bookRepository = Mockito.mock(BookRepository.class);
-        Mockito.when(bookRepository.findAll()).thenReturn(Collections.emptyList());
+        when(bookRepository.findAll()).thenReturn(Collections.emptyList());
         BookServiceImpl bookService = new BookServiceImpl(bookRepository);
         List<Book> actualResponse = bookService.bookList();
         assertTrue("true", 0 == actualResponse.size());
     }
 
+    @Test
+    void shouldReadCSVFileAndSaveDataInDatabase() throws Exception {
+        BookRepository bookRepository = Mockito.mock(BookRepository.class);
+        String csvContent = "ISBN,BookName,Description,Author,PublicationYear,SmallImageUrl,LargeImageUrl,Price,AvailableBooks,Rating\n" + "123456,Book1,Description1,Author1,2022,img1,img2,20.0,50,4.5";
+        MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", csvContent.getBytes());
+        BufferedReader stream = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        System.out.println(stream.readLine());
+        when(bookRepository.save(any(BookEntity.class))).thenReturn(new BookEntity("", "", "", "", 0, "", "", 0.0, 0, 0.0));
+        BookEntity bookEntity = new BookEntity("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55F, 2, 5.0F);
+        bookRepository.save(bookEntity);
+        verify(bookRepository, times(1)).save(any(BookEntity.class));
+    }
     private List<BookEntity> bookEntity() {
         BookEntity bookEntity = new BookEntity("01234X", "Java Book", "Book description", "Book author", 2023, "imageurl/img.img", "largeImageurl.img", 100.55F, 1, 4.5F);
         BookEntity bookEntity2 = new BookEntity("01235X", "TDD Book", "AMAR book", "Amar", 2022, "imageurl/img.img", "largeImageurl.img", 105.55F, 2, 5.0F);
