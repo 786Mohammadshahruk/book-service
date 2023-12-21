@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS ORDERS;
+CREATE TABLE ORDERS
+(
+    ORDER_ID                  VARCHAR(100) PRIMARY KEY,
+    BOOK_ID                   VARCHAR(100),
+    ADDRESS                   VARCHAR(100),
+    PIN_CODE                  VARCHAR(100),
+    COUNTRY                  VARCHAR(100),
+    ALTERNATIVE_MOBILE_NUMBER VARCHAR(100)
+);
