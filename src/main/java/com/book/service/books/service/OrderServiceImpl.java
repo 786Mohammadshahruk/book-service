@@ -12,13 +12,16 @@ import java.util.UUID;
 public class OrderServiceImpl {
 
     private OrderRepository orderRepository;
+    private BookServiceImpl bookService;
 
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository,BookServiceImpl bookService) {
         this.orderRepository = orderRepository;
+        this.bookService = bookService;
     }
 
     public ResponseOrder createOrder(OrderRequest orderRequest) {
         String orderId = UUID.randomUUID().toString();
+        bookService.updateInventory(orderRequest.getBookId(),orderRequest.getQuantity());
         return new ResponseOrder(orderRepository.save(new OrderEntity(orderId, orderRequest.getBookId(), orderRequest.getAddress(), orderRequest.getPinCode(), orderRequest.getCountry(), orderRequest.getAlternativeMobileNumber())));
     }
 }
