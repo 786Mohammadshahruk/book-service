@@ -1,13 +1,20 @@
 package com.book.service.user.controller;
 
+import com.book.service.books.utils.Token;
 import com.book.service.user.record.User;
 import com.book.service.user.record.UserResponse;
 import com.book.service.user.service.UserServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.HttpServer;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Base64;
 
 
 @Slf4j
@@ -29,8 +36,20 @@ public class UserController {
     }
 
     @GetMapping("/users/{name}")
-    public ResponseEntity<Boolean> books(@PathVariable String name) {
+    public ResponseEntity<Boolean> books(HttpServletRequest httpServletRequest, @PathVariable String name) throws JsonProcessingException {
+        String token = httpServletRequest.getHeader("Authorization");
+        if (token != null) {
+            String[] chunks = token.split("\\.");
+            Base64.Decoder decoder = Base64.getUrlDecoder();
+            String payload = new String(decoder.decode(chunks[1]));
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            Token token1 = objectMapper.readValue(payload, Token.class);
+            name = token1.getSub();
+
+        }
         return ResponseEntity.ok(userService.users(name));
     }
+
 
 }

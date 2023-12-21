@@ -37,5 +37,15 @@ public class OrderRequest {
         return alternativeMobileNumber;
     }
 
-
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
+    }
+    public OrderRequest(String bookId, String address, String pinCode, String country, String alternativeMobileNumber, Integer quantity) {
+        this.bookId = bookId;
+        this.address = address;
+        this.pinCode = pinCode;
+        this.country = country;
+        this.alternativeMobileNumber = alternativeMobileNumber;
+        this.quantity = quantity;
+    }
 }

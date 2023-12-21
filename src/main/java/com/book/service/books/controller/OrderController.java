@@ -1,16 +1,15 @@
 package com.book.service.books.controller;
 
 import com.book.service.books.dto.OrderRequest;
+import com.book.service.books.dto.OrderResponse;
+import com.book.service.books.records.BookResponse;
 import com.book.service.books.records.ResponseOrder;
 import com.book.service.books.service.OrderServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -27,5 +26,10 @@ public class OrderController {
         headers.add("Location", responseBook.orderEntity().getOrderId());
         return new ResponseEntity<>(responseBook, headers, HttpStatus.CREATED);
 
+    }
+
+    @GetMapping(value = "/orders")
+    public ResponseEntity findOrders(){
+        return ResponseEntity.ok(new OrderResponse(orderServiceImpl.findOrders()));
     }
 }
