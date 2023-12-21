@@ -37,7 +37,13 @@ public class UserController {
 
     @GetMapping("/users/{name}")
     public ResponseEntity<Boolean> books(HttpServletRequest httpServletRequest, @PathVariable String name) throws JsonProcessingException {
+        return ResponseEntity.ok(userService.users(name));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<Boolean> books(HttpServletRequest httpServletRequest) throws JsonProcessingException {
         String token = httpServletRequest.getHeader("Authorization");
+        String name = null;
         if (token != null) {
             String[] chunks = token.split("\\.");
             Base64.Decoder decoder = Base64.getUrlDecoder();
