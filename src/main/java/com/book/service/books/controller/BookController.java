@@ -60,4 +60,12 @@ public class BookController {
     public ResponseEntity<Book> getBookDetails(@PathVariable("bookId") String isbn) {
         return ResponseEntity.ok(bookServiceImpl.book(isbn));
     }
+
+    @GetMapping("/books/page")
+    public ResponseEntity<BookResponse> getAllBooksByPageNo(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(new BookResponse(bookServiceImpl.bookListByPageNo(page, size)));
+    }
 }

@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class BookServiceImpl {
     private static final Logger logger = LoggerFactory.getLogger(BookServiceImpl.class);
@@ -72,6 +76,26 @@ public class BookServiceImpl {
 
     public List<Book> bookList() {
         return bookRepository.findAll().stream().map(bookEntity -> new Book(bookEntity.getBookId(), bookEntity.getIsbn(), bookEntity.getBookName(), bookEntity.getDescription(), bookEntity.getAuthor(), bookEntity.getPublicationYear(), bookEntity.getSmallImageUrl(), bookEntity.getLargeImageUrl(), bookEntity.getPrice(), bookEntity.getNumberOfAvailableBooks(), bookEntity.getRating())).collect(Collectors.toList());
+    }
+
+    public List<Book> bookListByPageNo(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BookEntity> bookEntityPage = bookRepository.findAll(pageable);
+
+        return bookEntityPage.getContent().stream()
+                .map(bookEntity -> new Book(
+                        bookEntity.getBookId(),
+                        bookEntity.getIsbn(),
+                        bookEntity.getBookName(),
+                        bookEntity.getDescription(),
+                        bookEntity.getAuthor(),
+                        bookEntity.getPublicationYear(),
+                        bookEntity.getSmallImageUrl(),
+                        bookEntity.getLargeImageUrl(),
+                        bookEntity.getPrice(),
+                        bookEntity.getNumberOfAvailableBooks(),
+                        bookEntity.getRating()))
+                .collect(Collectors.toList());
     }
 
     public Book book(String bookId) {
