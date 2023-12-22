@@ -110,8 +110,10 @@ public class BookServiceImpl {
 
     public void updateInventory(String isbn, Integer quantity) {
         Optional<BookEntity> bookEntityOptional = bookRepository.findById(isbn);
-        BookEntity bookEntity = bookEntityOptional.get();
-        bookEntity.setNumberOfAvailableBooks(bookEntity.getNumberOfAvailableBooks() - quantity);
-        bookRepository.saveAndFlush(bookEntity);
+        if (bookEntityOptional.isPresent()) {
+            BookEntity bookEntity = bookEntityOptional.get();
+            bookEntity.setNumberOfAvailableBooks(bookEntity.getNumberOfAvailableBooks() - quantity);
+            bookRepository.saveAndFlush(bookEntity);
+        }
     }
 }

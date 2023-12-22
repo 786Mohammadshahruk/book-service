@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public class Token {
     private String sub;
+    private String aud;
     private Long nbf;
     private String role;
     private String iss;
@@ -14,6 +15,10 @@ public class Token {
 
     public Token(){
 
+    }
+
+    public String getAud() {
+        return aud;
     }
 
     public String getSub() {
@@ -80,8 +85,9 @@ public class Token {
         this.jti = jti;
     }
 
-    public Token(String sub, Long nbf, String role, String iss, Long exp, Long iat, String nonce, String jti) {
+    public Token(String sub,String aud, Long nbf, String role, String iss, Long exp, Long iat, String nonce, String jti) {
         this.sub = sub;
+        this.aud = aud;
         this.nbf = nbf;
         this.role = role;
         this.iss = iss;
