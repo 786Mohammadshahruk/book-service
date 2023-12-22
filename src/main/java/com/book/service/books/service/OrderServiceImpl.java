@@ -4,7 +4,6 @@ import com.book.service.books.dao.OrderRepository;
 import com.book.service.books.dto.Order;
 import com.book.service.books.dto.OrderRequest;
 import com.book.service.books.entity.OrderEntity;
-import com.book.service.books.records.Book;
 import com.book.service.books.records.ResponseOrder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,6 @@ public class OrderServiceImpl {
     }
 
     public List<Order> findOrders() {
-        return orderRepository.findAll().stream().map(orderEntity -> new Order(orderEntity.getOrderId(), orderEntity.getBookId(),orderEntity.getAddress(),orderEntity.getPinCode(),orderEntity.getCountry(),orderEntity.getAlternativeMobileNumber())).collect(Collectors.toList());
+        return orderRepository.findAll().stream().map(orderEntity -> new Order(orderEntity.getOrderId(), orderEntity.getBookId(),orderEntity.getAddress(),orderEntity.getPinCode(),orderEntity.getCountry(),orderEntity.getMobileNumber())).collect(Collectors.toList());
     }
 }

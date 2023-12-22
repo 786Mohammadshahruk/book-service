@@ -21,16 +21,16 @@ public class OrderEntity {
     private String pinCode;
     @Column(name = "country")
     private String country;
-    @Column(name = "alternative_mobile_number")
-    private String alternativeMobileNumber;
+    @Column(name = "mobile_number")
+    private String mobileNumber;
 
-    public OrderEntity(String orderId, String bookId, String address, String pinCode, String country, String alternativeMobileNumber) {
+    public OrderEntity(String orderId, String bookId, String address, String pinCode, String country, String mobileNumber) {
         this.orderId = orderId;
         this.bookId = bookId;
         this.address = address;
         this.pinCode = pinCode;
         this.country = country;
-        this.alternativeMobileNumber = alternativeMobileNumber;
+        this.mobileNumber = mobileNumber;
 
     }
     public OrderEntity() {}
@@ -75,11 +75,11 @@ public class OrderEntity {
         this.country = country;
     }
 
-    public String getAlternativeMobileNumber() {
-        return alternativeMobileNumber;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setAlternativeMobileNumber(String alternativeMobileNumber) {
-        this.alternativeMobileNumber = alternativeMobileNumber;
+    public void setMobileNumber(String alternativeMobileNumber) {
+        this.mobileNumber = alternativeMobileNumber;
     }
 }
