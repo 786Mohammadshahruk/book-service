@@ -1,19 +1,21 @@
 package com.book.service.user.controller;
 
 import com.book.service.books.utils.Token;
+import com.book.service.user.UserResponseDTO;
 import com.book.service.user.record.User;
 import com.book.service.user.record.UserResponse;
 import com.book.service.user.service.UserServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.net.httpserver.HttpServer;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 
@@ -40,21 +42,52 @@ public class UserController {
         return ResponseEntity.ok(userService.users(name));
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<Boolean> books(HttpServletRequest httpServletRequest) throws JsonProcessingException {
+    /*@GetMapping("/users")
+    public ResponseEntity<Boolean> books(HttpServletRequest httpServletRequest) throws JsonProcessingException, InvalidTokenException {
         String token = httpServletRequest.getHeader("Authorization");
-        String name = null;
-        if (token != null) {
-            String[] chunks = token.split("\\.");
-            Base64.Decoder decoder = Base64.getUrlDecoder();
-            String payload = new String(decoder.decode(chunks[1]));
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            Token token1 = objectMapper.readValue(payload, Token.class);
-            name = token1.getSub();
-
+        if (token == null) {
+            throw new InvalidTokenException("Token is Invalid");
         }
+        String[] chunks = token.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String payload = new String(decoder.decode(chunks[1]));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Token decryptToken = objectMapper.readValue(payload, Token.class);
+        String name = decryptToken.getSub();
         return ResponseEntity.ok(userService.users(name));
+    }*/
+
+    @GetMapping("/users")
+    public ResponseEntity<UserResponseDTO> getUserByName(@RequestHeader("Authorization") String token) {
+        validateToken(token);
+        Token decryptToken = decodeToken(token);
+        String name = decryptToken.getSub();
+
+        boolean userExists = userService.users(name);
+
+        UserResponseDTO responseDTO = new UserResponseDTO(userExists);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    private void validateToken(String token) {
+        if (token == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token is invalid");
+        }
+    }
+
+
+    private Token decodeToken(String token) {
+        String[] chunks = token.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String payload = new String(decoder.decode(chunks[1]), StandardCharsets.UTF_8);
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(payload, Token.class);
+        } catch (JsonProcessingException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Error decoding token", e);
+        }
     }
 
 

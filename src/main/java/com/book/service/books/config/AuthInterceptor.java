@@ -49,7 +49,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return jwtClaims.getClaimValueAsString("sub");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new InvalidTokenException();
+            throw new InvalidTokenException("Token is invalid");
         }
     }
 
