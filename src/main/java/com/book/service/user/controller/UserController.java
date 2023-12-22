@@ -21,7 +21,7 @@ import java.util.Base64;
 
 @Slf4j
 @RestController
-
+@CrossOrigin
 public class UserController {
     private UserServiceImpl userService;
 
